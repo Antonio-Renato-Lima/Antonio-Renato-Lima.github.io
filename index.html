@@ -36,16 +36,41 @@
     overflow-x: hidden;
   }
 
-  body::before{
-    content:'';
+  .ambient{
     position: fixed;
     inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-    background-size: 48px 48px;
-    pointer-events: none;
+    overflow: hidden;
     z-index: 0;
+    pointer-events: none;
+  }
+  .blob{
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.14;
+  }
+  .blob-amber{
+    width: 460px; height: 460px;
+    background: var(--amber);
+    top: -160px; left: -120px;
+    animation: drift1 24s ease-in-out infinite alternate;
+  }
+  .blob-teal{
+    width: 420px; height: 420px;
+    background: var(--teal);
+    top: 260px; right: -140px;
+    animation: drift2 28s ease-in-out infinite alternate;
+  }
+  @keyframes drift1{ from{ transform: translate(0,0); } to{ transform: translate(70px, 50px); } }
+  @keyframes drift2{ from{ transform: translate(0,0); } to{ transform: translate(-60px, 70px); } }
+
+  .progress-bar{
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--teal), var(--amber));
+    z-index: 200;
   }
 
   a{ color: inherit; text-decoration: none; }
@@ -190,7 +215,8 @@
   .result-table .hero-name{
     font-family: var(--sans);
     font-weight: 800;
-    font-size: 15px;
+    font-size: clamp(18px, 3.2vw, 26px);
+    letter-spacing: -0.01em;
     color: var(--amber);
   }
 
@@ -411,12 +437,86 @@
     .query-body{ font-size: 13px; }
   }
 
+  /* Reveal on scroll */
+  .reveal{
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+    transition-delay: var(--d, 0s);
+  }
+  .reveal.in-view{ opacity: 1; transform: translateY(0); }
+
+  /* Query box mouse-follow glow */
+  .query-box{ position: relative; }
+  .query-box::before{
+    content:'';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 20%), rgba(232,163,61,0.14), transparent 60%);
+    opacity: 0;
+    transition: opacity .3s ease;
+    pointer-events: none;
+  }
+  .query-box:hover::before{ opacity: 1; }
+  .result{ overflow-x: auto; }
+
+  /* Animated skill bars */
+  .skill-bar span{ width: 0; transition: width 1.1s cubic-bezier(.2,.8,.2,1); }
+
+  /* Nav underline */
+  .nav-links a{ position: relative; }
+  .nav-links a::after{
+    content:'';
+    position: absolute;
+    left: 0; bottom: -4px;
+    width: 0; height: 1px;
+    background: var(--amber);
+    transition: width .25s ease;
+  }
+  .nav-links a:hover::after{ width: 100%; }
+
+  /* Project card tilt */
+  .project-card{
+    transition: transform .15s ease, border-color .2s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  /* Data stream divider */
+  .data-stream{
+    padding: 10px 0 0;
+    display: flex;
+    justify-content: center;
+  }
+  .data-stream svg path{
+    fill: none;
+    stroke: url(#streamGradient);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 900;
+    stroke-dashoffset: 900;
+    transition: stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1);
+  }
+  .data-stream.in-view svg path{ stroke-dashoffset: 0; }
+
+  @media (max-width: 720px){
+    .blob{ width: 260px !important; height: 260px !important; }
+  }
+
   @media (prefers-reduced-motion: reduce){
     *{ animation: none !important; transition: none !important; }
+    .reveal{ opacity: 1 !important; transform: none !important; }
+    .data-stream svg path{ stroke-dashoffset: 0 !important; }
   }
 </style>
 </head>
 <body>
+
+<div class="ambient">
+  <div class="blob blob-amber"></div>
+  <div class="blob blob-teal"></div>
+</div>
+<div class="progress-bar" id="progress-bar"></div>
 
 <header>
   <nav class="wrap">
@@ -468,16 +568,16 @@
 
 <section id="sobre">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-num">01</span>
       <h2>Sobre</h2>
     </div>
     <div class="about-grid">
-      <div class="about-text">
+      <div class="about-text reveal">
         <p>Trabalho <strong>imerso em dados</strong> — do modelo relacional em <strong>SQL Server</strong> à visualização e storytelling em <strong>Power BI</strong>, passando por automação e análise em <strong>Python</strong>. Gosto de transformar números soltos em decisão.</p>
         <p>Também construo interfaces simples com <strong>HTML/CSS</strong> quando um projeto de dados precisa virar produto — como o MVP abaixo.</p>
       </div>
-      <div class="info-card">
+      <div class="info-card reveal" style="--d:.12s">
         <div class="info-row">
           <span class="k">formação</span>
           <span class="v">Graduando em ADS</span>
@@ -499,44 +599,62 @@
   </div>
 </section>
 
+<div class="data-stream reveal">
+  <svg width="100%" height="60" viewBox="0 0 800 60" preserveAspectRatio="none" style="max-width:600px">
+    <defs>
+      <linearGradient id="streamGradient" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#45B8AC"/>
+        <stop offset="100%" stop-color="#E8A33D"/>
+      </linearGradient>
+    </defs>
+    <path d="M0,45 C90,10 160,50 240,28 S380,5 460,30 S600,50 680,15 L800,25"/>
+  </svg>
+</div>
+
 <section id="skills">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-num">02</span>
       <h2>Stack</h2>
     </div>
     <div class="skills-grid">
-      <div class="skill-card">
+      <div class="skill-card reveal" style="--d:0s">
         <div class="skill-tag">database</div>
         <div class="skill-name">SQL Server</div>
-        <div class="skill-bar"><span style="width:85%"></span></div>
+        <div class="skill-bar"><span data-width="85%"></span></div>
       </div>
-      <div class="skill-card">
+      <div class="skill-card reveal" style="--d:.08s">
         <div class="skill-tag">bi & dados</div>
         <div class="skill-name">Power BI</div>
-        <div class="skill-bar"><span style="width:85%"></span></div>
+        <div class="skill-bar"><span data-width="85%"></span></div>
       </div>
-      <div class="skill-card">
+      <div class="skill-card reveal" style="--d:.16s">
         <div class="skill-tag">linguagem</div>
         <div class="skill-name">Python</div>
-        <div class="skill-bar"><span style="width:70%"></span></div>
+        <div class="skill-bar"><span data-width="70%"></span></div>
       </div>
-      <div class="skill-card">
+      <div class="skill-card reveal" style="--d:.24s">
         <div class="skill-tag">front-end</div>
         <div class="skill-name">HTML / CSS</div>
-        <div class="skill-bar"><span style="width:50%"></span></div>
+        <div class="skill-bar"><span data-width="50%"></span></div>
       </div>
     </div>
   </div>
 </section>
 
+<div class="data-stream reveal">
+  <svg width="100%" height="60" viewBox="0 0 800 60" preserveAspectRatio="none" style="max-width:600px">
+    <path d="M0,20 C90,50 160,15 240,35 S380,55 460,25 S600,10 680,45 L800,30"/>
+  </svg>
+</div>
+
 <section id="projetos">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-num">03</span>
       <h2>Projetos</h2>
     </div>
-    <div class="project-card">
+    <div class="project-card reveal" id="project-card">
       <div>
         <div class="project-label">MVP</div>
         <div class="project-title">Tonhia</div>
@@ -548,32 +666,32 @@
       </div>
       <a class="project-link" href="https://tonhia-miscliente.up.railway.app/doc" target="_blank" rel="noopener">Acessar MVP →</a>
     </div>
-    <p class="note">// substitua a descrição acima pelo que o Tonhia realmente faz — mantive um placeholder pra você editar.</p>
+    <p class="note reveal">// substitua a descrição acima pelo que o Tonhia realmente faz — mantive um placeholder pra você editar.</p>
   </div>
 </section>
 
 <section id="contato">
   <div class="wrap">
-    <div class="section-head">
+    <div class="section-head reveal">
       <span class="section-num">04</span>
       <h2>Contato</h2>
     </div>
     <div class="contact-grid">
-      <a class="contact-card" href="https://github.com/Antonio-Renato-Lima" target="_blank" rel="noopener">
+      <a class="contact-card reveal" style="--d:0s" href="https://github.com/Antonio-Renato-Lima" target="_blank" rel="noopener">
         <div class="contact-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 0 0-3.8 23.38c.6.1.83-.26.83-.58v-2c-3.34.73-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.77-1.34-1.77-1.1-.75.08-.74.08-.74 1.2.09 1.84 1.24 1.84 1.24 1.08 1.84 2.83 1.31 3.52 1 .1-.78.42-1.31.76-1.61-2.67-.3-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.53.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.65.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.62-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3"/></svg>
         </div>
         <div class="contact-label">GitHub</div>
         <div class="contact-value">Antonio-Renato-Lima</div>
       </a>
-      <a class="contact-card" href="https://www.linkedin.com/in/renatolima-santos/" target="_blank" rel="noopener">
+      <a class="contact-card reveal" style="--d:.1s" href="https://www.linkedin.com/in/renatolima-santos/" target="_blank" rel="noopener">
         <div class="contact-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.94v5.67H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.38-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z"/></svg>
         </div>
         <div class="contact-label">LinkedIn</div>
         <div class="contact-value">renatolima-santos</div>
       </a>
-      <a class="contact-card" href="mailto:rkrenato6969@gmail.com">
+      <a class="contact-card reveal" style="--d:.2s" href="mailto:rkrenato6969@gmail.com">
         <div class="contact-icon">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
         </div>
@@ -641,6 +759,61 @@
       setTimeout(typeNext, 28);
     }
     typeNext();
+  }
+
+  // Scroll progress bar
+  const progressBar = document.getElementById('progress-bar');
+  function updateProgress(){
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  }
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  updateProgress();
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal, .data-stream');
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          // Animate skill bars inside revealed card
+          entry.target.querySelectorAll('.skill-bar span').forEach(bar => {
+            bar.style.width = bar.dataset.width;
+          });
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in-view'));
+    document.querySelectorAll('.skill-bar span').forEach(bar => bar.style.width = bar.dataset.width);
+  }
+
+  if(!prefersReduced){
+    // Query box mouse-follow glow
+    const queryBox = document.querySelector('.query-box');
+    queryBox.addEventListener('mousemove', (e) => {
+      const rect = queryBox.getBoundingClientRect();
+      queryBox.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      queryBox.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+
+    // Project card tilt
+    const card = document.getElementById('project-card');
+    if(card){
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const px = (e.clientX - rect.left) / rect.width - 0.5;
+        const py = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `perspective(800px) rotateX(${py * -4}deg) rotateY(${px * 4}deg) translateY(-2px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    }
   }
 </script>
 
