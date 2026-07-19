@@ -392,6 +392,16 @@
     margin-top: 16px;
     opacity: 0.7;
   }
+  .project-card + .project-card{ margin-top: 16px; }
+  .project-tag{
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    border: 1px dashed var(--border);
+    padding: 10px 16px;
+    border-radius: var(--radius);
+  }
 
   /* CONTACT */
   .contact-grid{
@@ -665,6 +675,34 @@
         </div>
       </div>
       <a class="project-link" href="https://tonhia.arlsdata.com" target="_blank" rel="noopener">Acessar MVP →</a>
+    </div>
+
+    <div class="project-card reveal">
+      <div>
+        <div class="project-label">BI Interno</div>
+        <div class="project-title">Intraday</div>
+        <p class="project-desc">Painel Power BI para acompanhamento de indicadores de call center em tempo real, dando suporte às equipes de operação e planejamento na tomada de decisão intraday.</p>
+        <div class="project-stack">
+          <span class="chip">Power BI</span>
+          <span class="chip">DAX</span>
+          <span class="chip">Operação</span>
+        </div>
+      </div>
+      <span class="project-tag">Uso interno</span>
+    </div>
+
+    <div class="project-card reveal">
+      <div>
+        <div class="project-label">BI Interno</div>
+        <div class="project-title">Microgestão</div>
+        <p class="project-desc">Relatório de gestão de colaboradores focado nos resultados individuais de cada atendente, independente da fila em que atuou — uma visão de performance que vai além do indicador operacional tradicional.</p>
+        <div class="project-stack">
+          <span class="chip">Power BI</span>
+          <span class="chip">DAX</span>
+          <span class="chip">Gestão de Pessoas</span>
+        </div>
+      </div>
+      <span class="project-tag">Uso interno</span>
     </div>
   </div>
 </section>
