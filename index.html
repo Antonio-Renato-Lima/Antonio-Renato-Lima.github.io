@@ -1421,9 +1421,9 @@
       });
     }
 
-    // Project card tilt
-    const card = document.getElementById('project-card');
-    if(card){
+    // Project card tilt - em TODOS os cards
+    const cards = document.querySelectorAll('.project-card');
+    cards.forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const px = (e.clientX - rect.left) / rect.width - 0.5;
@@ -1433,6 +1433,7 @@
       card.addEventListener('mouseleave', () => {
         card.style.transform = '';
       });
+    });
     }
   }
 </script>
