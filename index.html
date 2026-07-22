@@ -125,7 +125,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-    align-items: center;
+    align-items: start;
     min-width: 0;
   }
   .hero-left{
@@ -688,6 +688,13 @@
     transition: border-color .2s ease;
   }
   .project-link:hover{ border-color: var(--amber); }
+
+  .project-media{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
   
   /* PROJECT VIDEO */
   .project-video{
@@ -1288,11 +1295,14 @@
           <span class="chip">⚡ Railway</span>
         </div>
       </div>
-      <div class="project-video">
-        <video autoplay muted loop playsinline>
-          <source src="./tonhia-avatar.webm" type="video/webm">
-          Seu navegador não suporta vídeos WebM
-        </video>
+      <div class="project-media">
+        <a href="https://tonhia.arlsdata.com" target="_blank" rel="noopener" class="project-link">Acessar MVP →</a>
+        <div class="project-video">
+          <video autoplay muted loop playsinline>
+            <source src="./tonhia-avatar.webm" type="video/webm">
+            Seu navegador não suporta vídeos WebM
+          </video>
+        </div>
       </div>
     </div>
 
