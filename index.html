@@ -5,9 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Antonio Renato — Dados & Desenvolvimento</title>
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -121,9 +118,36 @@
 
   /* HERO */
   .hero{
-    padding: 90px 0 80px;
+    padding: 70px 0 60px;
     position: relative;
   }
+  .hero-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .hero-left{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .hero-image{
+    width: 100%;
+    max-width: 320px;
+    height: 380px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    box-shadow: 0 20px 60px -20px rgba(69,184,172,0.3);
+    justify-self: center;
+  }
+  .hero-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   .eyebrow{
     font-family: var(--mono);
     font-size: 12px;
@@ -251,6 +275,103 @@
   .btn-ghost{ color: var(--text); }
   .btn-ghost:hover{ border-color: var(--teal); color: var(--teal); }
 
+  /* PIPELINE VISUAL */
+  .pipeline-section{
+    margin: 50px 0 0;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+  }
+  .pipeline-container{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin-top: 24px;
+  }
+  .pipeline-flow{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+  }
+  .pipeline-step{
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 16px;
+    text-align: center;
+    transition: all .3s ease;
+    position: relative;
+  }
+  .pipeline-step:hover{
+    border-color: var(--amber);
+    transform: translateY(-4px);
+  }
+  .pipeline-icon{
+    font-size: 28px;
+    margin-bottom: 12px;
+  }
+  .pipeline-label{
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .pipeline-title{
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .pipeline-desc{
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .pipeline-arrow{
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--amber);
+    font-size: 20px;
+    opacity: 0.6;
+  }
+  .pipeline-step:last-child .pipeline-arrow{
+    display: none;
+  }
+
+  /* STORYTELLING */
+  .storytelling-section{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin: 40px 0;
+  }
+  .storytelling-title{
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .storytelling-title::before{
+    content: '→';
+  }
+  .storytelling-text{
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .storytelling-highlight{
+    color: var(--text);
+    font-weight: 600;
+  }
+
   /* SECTIONS */
   section{ padding: 70px 0; border-top: 1px solid var(--border); }
   .section-head{
@@ -319,6 +440,10 @@
     transition: border-color .2s ease, transform .2s ease;
   }
   .skill-card:hover{ border-color: var(--amber); transform: translateY(-3px); }
+  .skill-icon{
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
   .skill-tag{
     font-family: var(--mono);
     font-size: 11px;
@@ -377,6 +502,11 @@
     color: var(--text-muted);
     padding: 4px 9px;
     border-radius: 4px;
+    transition: all .2s ease;
+  }
+  .chip:hover{
+    border-color: var(--amber);
+    color: var(--amber);
   }
   .project-link{
     font-family: var(--mono);
@@ -441,6 +571,18 @@
   }
   footer .amber{ color: var(--amber); }
 
+  @media (max-width: 920px){
+    .hero-container{
+      grid-template-columns: 1fr;
+    }
+    .pipeline-flow{
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .pipeline-arrow{
+      display: none;
+    }
+  }
+
   @media (max-width: 720px){
     .nav-links{ display:none; }
     .about-grid{ grid-template-columns: 1fr; }
@@ -449,6 +591,9 @@
     .project-card{ grid-template-columns: 1fr; }
     .project-link{ justify-self: start; }
     .query-body{ font-size: 13px; }
+    .pipeline-flow{
+      grid-template-columns: 1fr;
+    }
   }
 
   /* Reveal on scroll */
@@ -547,36 +692,94 @@
 <section class="hero">
   <div class="wrap">
     <div class="eyebrow">query executada em 0.04s</div>
-    <div class="query-box">
-      <div class="query-titlebar">
-        <div class="dot r"></div>
-        <div class="dot y"></div>
-        <div class="dot g"></div>
-        <span class="query-filename">perfil.sql</span>
+    
+    <!-- HERO COM FOTO -->
+    <div class="hero-container">
+      <div class="hero-left">
+        <div class="query-box">
+          <div class="query-titlebar">
+            <div class="dot r"></div>
+            <div class="dot y"></div>
+            <div class="dot g"></div>
+            <span class="query-filename">perfil.sql</span>
+          </div>
+          <div class="query-body">
+            <div id="typed-line"></div>
+            <div class="result" id="result-block">
+              <table class="result-table">
+                <thead>
+                  <tr><th>nome</th><th>função</th><th>stack</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="hero-name">Antonio Renato</td>
+                    <td>Dados & BI</td>
+                    <td>SQL Server · Power BI · Python</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#projetos" class="btn btn-primary">Ver projetos →</a>
+          <a href="#contato" class="btn btn-ghost">Entrar em contato</a>
+        </div>
       </div>
-      <div class="query-body">
-        <div id="typed-line"></div>
-        <div class="result" id="result-block">
-          <table class="result-table">
-            <thead>
-              <tr><th>nome</th><th>função</th><th>stack</th></tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="hero-name">Antonio Renato</td>
-                <td>Imerso em dados e desbravador de criações</td>
-                <td>SQL Server · Power BI · Python</td>
-              </tr>
-            </tbody>
-          </table>
+
+      <!-- FOTO ADICIONADA -->
+      <div class="hero-image">
+        <img src="./foto-perfil.jpg" alt="Antonio Renato">
+      </div>
+    </div>
+
+    <!-- STORYTELLING SECTION -->
+    <div class="pipeline-section">
+      <div class="storytelling-section reveal">
+        <div class="storytelling-title">Do problema ao insight</div>
+        <div class="storytelling-text">
+          <span class="storytelling-highlight">Transformo dados brutos em decisões.</span> Com SQL Server, construo pipelines sólidos. Com Power BI, crio visualizações que falam. E com Python, automatizo o que pode ser automatizado. O foco é simples: colocar os dados certos na mão certa, na hora certa.
         </div>
       </div>
     </div>
 
-    <div class="hero-actions">
-      <a href="#projetos" class="btn btn-primary">Ver projetos →</a>
-      <a href="#contato" class="btn btn-ghost">Entrar em contato</a>
+    <!-- PIPELINE VISUAL -->
+    <div class="pipeline-section reveal">
+      <h3 style="font-size: 16px; margin-bottom: 16px; font-weight: 700;">Fluxo de trabalho</h3>
+      <div class="pipeline-container">
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <div class="pipeline-icon">🗄️</div>
+            <div class="pipeline-label">Camada 1</div>
+            <div class="pipeline-title">SQL Server</div>
+            <div class="pipeline-desc">Dados raw e estruturados</div>
+            <div class="pipeline-arrow">→</div>
+          </div>
+          <div class="pipeline-step">
+            <div class="pipeline-icon">⚙️</div>
+            <div class="pipeline-label">Camada 2</div>
+            <div class="pipeline-title">Transformação</div>
+            <div class="pipeline-desc">Limpeza e normalização</div>
+            <div class="pipeline-arrow">→</div>
+          </div>
+          <div class="pipeline-step">
+            <div class="pipeline-icon">📊</div>
+            <div class="pipeline-label">Camada 3</div>
+            <div class="pipeline-title">Power BI</div>
+            <div class="pipeline-desc">Visualização e storytelling</div>
+            <div class="pipeline-arrow">→</div>
+          </div>
+          <div class="pipeline-step">
+            <div class="pipeline-icon">✨</div>
+            <div class="pipeline-label">Resultado</div>
+            <div class="pipeline-title">Decisão</div>
+            <div class="pipeline-desc">Impacto real no negócio</div>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -589,7 +792,7 @@
     <div class="about-grid">
       <div class="about-text reveal">
         <p>Trabalho <strong>imerso em dados</strong> — do modelo relacional em <strong>SQL Server</strong> à visualização e storytelling em <strong>Power BI</strong>, passando por automação e análise em <strong>Python</strong>. Gosto de transformar números soltos em decisão.</p>
-        <p>Também construo interfaces simples com <strong>HTML/CSS</strong> quando um projeto de dados precisa virar produto — como o MVP abaixo.</p>
+        <p>Também construo interfaces simples com <strong>HTML/CSS</strong> quando um projeto de dados precisa virar produto — como o MVP <strong>Tonhia</strong> abaixo, que traz IA para acelerar o suporte técnico de times de dados.</p>
       </div>
       <div class="info-card reveal" style="--d:.12s">
         <div class="info-row">
@@ -633,21 +836,25 @@
     </div>
     <div class="skills-grid">
       <div class="skill-card reveal" style="--d:0s">
+        <div class="skill-icon">🗄️</div>
         <div class="skill-tag">database</div>
         <div class="skill-name">SQL Server</div>
         <div class="skill-bar"><span data-width="85%"></span></div>
       </div>
       <div class="skill-card reveal" style="--d:.08s">
+        <div class="skill-icon">📊</div>
         <div class="skill-tag">bi & dados</div>
         <div class="skill-name">Power BI</div>
         <div class="skill-bar"><span data-width="85%"></span></div>
       </div>
       <div class="skill-card reveal" style="--d:.16s">
+        <div class="skill-icon">🐍</div>
         <div class="skill-tag">linguagem</div>
         <div class="skill-name">Python</div>
         <div class="skill-bar"><span data-width="70%"></span></div>
       </div>
       <div class="skill-card reveal" style="--d:.24s">
+        <div class="skill-icon">🎨</div>
         <div class="skill-tag">front-end</div>
         <div class="skill-name">HTML / CSS</div>
         <div class="skill-bar"><span data-width="50%"></span></div>
@@ -668,42 +875,47 @@
       <span class="section-num">03</span>
       <h2>Projetos</h2>
     </div>
+    
+    <!-- PROJETO 1: TONHIA -->
     <div class="project-card reveal" id="project-card">
       <div>
-        <div class="project-label">MVP</div>
+        <div class="project-label">🚀 MVP</div>
         <div class="project-title">Tonhia</div>
-        <p class="project-desc">Assistente de suporte técnico com IA para times de dados — tira dúvidas sobre SQL Server, SSIS e Power BI, com busca semântica (RAG) na base de conhecimento e documentação automática de scripts.</p>
+        <p class="project-desc">Do problema ao conhecimento. Assistente de suporte técnico com IA que resolve dúvidas sobre SQL Server, SSIS e Power BI em tempo real, com busca semântica (RAG) na base de conhecimento e documentação automática de scripts.</p>
         <div class="project-stack">
-          <span class="chip">Railway</span>
-          <span class="chip">MVP</span>
+          <span class="chip">🤖 IA/RAG</span>
+          <span class="chip">🚀 Produção</span>
+          <span class="chip">⚡ Railway</span>
         </div>
       </div>
-      <a class="project-link" href="https://tonhia.arlsdata.com" target="_blank" rel="noopener">Acessar MVP →</a>
+      <a class="project-link" href="https://tonhia.arlsdata.com" target="_blank" rel="noopener">Acessar →</a>
     </div>
 
+    <!-- PROJETO 2: INTRADAY -->
     <div class="project-card reveal">
       <div>
-        <div class="project-label">BI Interno</div>
+        <div class="project-label">📊 BI Interno</div>
         <div class="project-title">Intraday</div>
-        <p class="project-desc">Painel Power BI para acompanhamento de indicadores de call center em tempo real, dando suporte às equipes de operação e planejamento na tomada de decisão intraday.</p>
+        <p class="project-desc">Do tempo real à ação. Painel Power BI que acompanha indicadores de call center em tempo real, dando suporte às equipes de operação e planejamento na tomada de decisão intraday com precisão.</p>
         <div class="project-stack">
-          <span class="chip">Power BI</span>
-          <span class="chip">DAX</span>
-          <span class="chip">Operação</span>
+          <span class="chip">📊 Power BI</span>
+          <span class="chip">🧮 DAX</span>
+          <span class="chip">⚡ Real-time</span>
         </div>
       </div>
       <span class="project-tag">Uso interno</span>
     </div>
 
+    <!-- PROJETO 3: MICROGESTÃO -->
     <div class="project-card reveal">
       <div>
-        <div class="project-label">BI Interno</div>
+        <div class="project-label">👥 BI Interno</div>
         <div class="project-title">Microgestão</div>
-        <p class="project-desc">Relatório de gestão de colaboradores focado nos resultados individuais de cada atendente, independente da fila em que atuou — uma visão de performance que vai além do indicador operacional tradicional.</p>
+        <p class="project-desc">Do coletivo ao individual. Relatório de gestão focado nos resultados individuais de cada atendente, independente da fila — uma visão de performance que vai além do indicador operacional tradicional.</p>
         <div class="project-stack">
-          <span class="chip">Power BI</span>
-          <span class="chip">DAX</span>
-          <span class="chip">Gestão de Pessoas</span>
+          <span class="chip">📊 Power BI</span>
+          <span class="chip">🧮 DAX</span>
+          <span class="chip">📈 Gestão</span>
         </div>
       </div>
       <span class="project-tag">Uso interno</span>
@@ -819,7 +1031,6 @@
       entries.forEach(entry => {
         if(entry.isIntersecting){
           entry.target.classList.add('in-view');
-          // Animate skill bars inside revealed card
           entry.target.querySelectorAll('.skill-bar span').forEach(bar => {
             bar.style.width = bar.dataset.width;
           });
@@ -836,11 +1047,13 @@
   if(!prefersReduced){
     // Query box mouse-follow glow
     const queryBox = document.querySelector('.query-box');
-    queryBox.addEventListener('mousemove', (e) => {
-      const rect = queryBox.getBoundingClientRect();
-      queryBox.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
-      queryBox.style.setProperty('--my', (e.clientY - rect.top) + 'px');
-    });
+    if(queryBox){
+      queryBox.addEventListener('mousemove', (e) => {
+        const rect = queryBox.getBoundingClientRect();
+        queryBox.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+        queryBox.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      });
+    }
 
     // Project card tilt
     const card = document.getElementById('project-card');
