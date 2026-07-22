@@ -126,11 +126,13 @@
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: center;
+    min-width: 0;
   }
   .hero-left{
     display: flex;
     flex-direction: column;
     gap: 24px;
+    min-width: 0;
   }
   .hero-image{
     width: 100%;
@@ -141,11 +143,14 @@
     border: 2px solid var(--border);
     box-shadow: 0 20px 60px -20px rgba(69,184,172,0.3);
     justify-self: center;
+    flex-shrink: 0;
   }
   .hero-image img{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center 22%;
+    display: block;
   }
 
   .eyebrow{
@@ -173,6 +178,7 @@
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: 0 20px 60px -20px rgba(0,0,0,0.5);
+    min-width: 0;
   }
   .query-titlebar{
     display:flex;
@@ -196,6 +202,8 @@
     padding: 22px 20px;
     font-family: var(--mono);
     font-size: 15px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   .query-body .kw{ color: var(--teal); }
   .query-body .fn{ color: var(--amber); }
@@ -735,6 +743,13 @@
   @media (max-width: 920px){
     .hero-container{
       grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .hero-image{
+      order: -1;
+      max-width: 220px;
+      height: 260px;
+      margin: 0 auto;
     }
     .pipeline-flow{
       grid-template-columns: repeat(2, 1fr);
@@ -761,6 +776,11 @@
     }
     .experience-stats{
       grid-template-columns: repeat(2, 1fr);
+    }
+    .hero-image{
+      max-width: 180px;
+      height: 210px;
+      border-radius: 10px;
     }
   }
 
@@ -1310,9 +1330,9 @@
 <script>
   const fullText = [
     { t: 'SELECT ', c: 'kw' },
-    { t: 'nome, funcao, stack ', c: '' },
+    { t: 'nome, funcao, stack\n', c: '' },
     { t: 'FROM ', c: 'kw' },
-    { t: 'devs ', c: '' },
+    { t: 'devs\n', c: '' },
     { t: 'WHERE ', c: 'kw' },
     { t: "nome = ", c: '' },
     { t: "'Antonio Renato'", c: 'str' },
