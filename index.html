@@ -140,35 +140,100 @@
     gap: 24px;
   }
 
+  /* LANGUAGE DROPDOWN */
   .language-switcher{
-    display: flex;
-    gap: 8px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 4px;
-    background: var(--surface);
+    position: relative;
   }
 
-  .lang-btn{
-    padding: 4px 10px;
-    font-size: 12px;
+  .lang-toggle{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface);
+    color: var(--text);
+    cursor: pointer;
+    transition: all .2s ease;
+    font-size: 14px;
     font-family: var(--mono);
-    background: transparent;
-    border: none;
+  }
+
+  .lang-toggle:hover{
+    border-color: var(--amber);
+    background: var(--surface-2);
+  }
+
+  .lang-toggle::after{
+    content: '▼';
+    font-size: 10px;
+    opacity: 0.6;
+  }
+
+  .lang-dropdown{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 8px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    min-width: 180px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition: all .2s ease;
+    z-index: 100;
+  }
+
+  .lang-dropdown.active{
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .lang-option{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
     color: var(--text-muted);
     cursor: pointer;
     transition: all .2s ease;
-    border-radius: 2px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--sans);
+    font-size: 14px;
   }
 
-  .lang-btn.active{
-    background: var(--amber);
-    color: var(--bg);
+  .lang-option:last-child{
+    border-bottom: none;
+  }
+
+  .lang-option:hover{
+    background: var(--surface-2);
+    color: var(--text);
+  }
+
+  .lang-option.active{
+    background: var(--amber-dim);
+    color: var(--amber);
     font-weight: 600;
   }
 
-  .lang-btn:hover:not(.active){
-    color: var(--text);
+  .lang-flag{
+    font-size: 20px;
+  }
+
+  .lang-name{
+    flex: 1;
+  }
+
+  .lang-check{
+    color: var(--amber);
+    font-weight: bold;
   }
 
   @media (max-width: 768px){
@@ -188,7 +253,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-    align-items: center;
+    align-items: flex-start;
     min-width: 0;
   }
   
@@ -533,12 +598,44 @@
     color: var(--teal);
   }
 
-  .project-tag{
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+  .project-links{
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .project-link{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, var(--amber), #d4892f);
+    color: var(--bg);
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--sans);
+    text-decoration: none;
+    transition: all .3s ease;
+    border: none;
+    cursor: pointer;
+  }
+
+  .project-link:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(232,163,61,0.3);
+  }
+
+  .project-link.secondary{
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .project-link.secondary:hover{
+    border-color: var(--teal);
+    background: rgba(69,184,172,0.1);
+    color: var(--teal);
   }
 
   .project-video{
@@ -546,7 +643,6 @@
     aspect-ratio: 1;
     border-radius: 8px;
     overflow: hidden;
-    border: 1px solid var(--border);
   }
 
   .project-video video{
@@ -675,7 +771,7 @@
 <header>
   <nav class="wrap">
     <div class="nav-left">
-      <div class="logo"><span>&lt;</span> Antonio<span>&gt;</span></div>
+      <div class="logo"><span>&lt;</span> Antonio Renato <span>&gt;</span></div>
       <div class="nav-links" id="nav-links">
         <a href="#home" data-pt="Home" data-en="Home">Home</a>
         <a href="#about" data-pt="Sobre" data-en="About">Sobre</a>
@@ -686,8 +782,21 @@
     </div>
     <div class="nav-right">
       <div class="language-switcher">
-        <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')">PT</button>
-        <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+        <button class="lang-toggle" id="lang-toggle" onclick="toggleLangDropdown()">
+          <span id="flag-display">🇧🇷</span>
+        </button>
+        <div class="lang-dropdown" id="lang-dropdown">
+          <div class="lang-option active" data-lang="pt" onclick="setLanguage('pt')">
+            <span class="lang-flag">🇧🇷</span>
+            <span class="lang-name">Português</span>
+            <span class="lang-check">✓</span>
+          </div>
+          <div class="lang-option" data-lang="en" onclick="setLanguage('en')">
+            <span class="lang-flag">🇺🇸</span>
+            <span class="lang-name">English</span>
+            <span class="lang-check">✓</span>
+          </div>
+        </div>
       </div>
     </div>
   </nav>
@@ -817,6 +926,9 @@
           <span class="chip" data-pt="🚀 Produção" data-en="🚀 Production">🚀 Produção</span>
           <span class="chip">⚡ Railway</span>
         </div>
+        <div class="project-links">
+          <a href="#" class="project-link">Acessar Projeto →</a>
+        </div>
       </div>
       <div class="project-video">
         <video autoplay muted loop playsinline>
@@ -839,6 +951,11 @@
           <span class="chip">🧮 DAX</span>
           <span class="chip" data-pt="⚡ Real-time" data-en="⚡ Real-time">⚡ Real-time</span>
         </div>
+        <div class="project-links">
+          <button class="project-link secondary" data-pt="Ver Detalhes" data-en="View Details">
+            Ver Detalhes →
+          </button>
+        </div>
       </div>
       <span class="project-tag" data-pt="Uso interno" data-en="Internal use">Uso interno</span>
     </div>
@@ -855,6 +972,11 @@
           <span class="chip">📊 Power BI</span>
           <span class="chip">🧮 DAX</span>
           <span class="chip" data-pt="📈 Gestão" data-en="📈 Management">📈 Gestão</span>
+        </div>
+        <div class="project-links">
+          <button class="project-link secondary" data-pt="Ver Detalhes" data-en="View Details">
+            Ver Detalhes →
+          </button>
         </div>
       </div>
       <span class="project-tag" data-pt="Uso interno" data-en="Internal use">Uso interno</span>
@@ -932,14 +1054,37 @@
 
   let currentLanguage = localStorage.getItem('language') || 'pt';
 
+  // Toggle language dropdown
+  function toggleLangDropdown() {
+    const dropdown = document.getElementById('lang-dropdown');
+    dropdown.classList.toggle('active');
+  }
+
+  // Close dropdown quando clicar fora
+  document.addEventListener('click', (e) => {
+    const switcher = document.querySelector('.language-switcher');
+    const dropdown = document.getElementById('lang-dropdown');
+    
+    if (!switcher.contains(e.target)) {
+      dropdown.classList.remove('active');
+    }
+  });
+
   function setLanguage(lang) {
     currentLanguage = lang;
     localStorage.setItem('language', lang);
     
-    // Update active button
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.remove('active');
-      if(btn.dataset.lang === lang) btn.classList.add('active');
+    // Close dropdown
+    document.getElementById('lang-dropdown').classList.remove('active');
+    
+    // Update flag display
+    const flags = { pt: '🇧🇷', en: '🇺🇸' };
+    document.getElementById('flag-display').textContent = flags[lang];
+    
+    // Update active option in dropdown
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      opt.classList.remove('active');
+      if(opt.dataset.lang === lang) opt.classList.add('active');
     });
 
     // Update HTML lang attribute
@@ -971,9 +1116,17 @@
 
   // Initialize language on load
   window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      if(btn.dataset.lang === currentLanguage) btn.classList.add('active');
+    // Set initial flag
+    const flags = { pt: '🇧🇷', en: '🇺🇸' };
+    document.getElementById('flag-display').textContent = flags[currentLanguage];
+    
+    // Mark active option
+    document.querySelectorAll('.lang-option').forEach(opt => {
+      if(opt.dataset.lang === currentLanguage) {
+        opt.classList.add('active');
+      }
     });
+    
     setLanguage(currentLanguage);
   });
 
